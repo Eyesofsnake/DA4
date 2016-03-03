@@ -1,188 +1,186 @@
 window.onload = function() {
-    // You might want to start with a template that uses GameStates:
-    //     https://github.com/photonstorm/phaser/tree/master/resources/Project%20Templates/Basic
-    
-    // You can copy-and-paste the code from any of the examples at http://examples.phaser.io here.
-    // You will need to change the fourth parameter to "new Phaser.Game()" from
-    // 'phaser-example' to 'game', which is the id of the HTML element where we
-    // want the game to go.
-    // The assets (and code) can be found at: https://github.com/photonstorm/phaser/tree/master/examples/assets
-    // You will need to change the paths you pass to "game.load.image()" or any other
-    // loading functions to reflect where you are putting the assets.
-    // All loading functions will typically all be found inside "preload()".
-    
-    
     "use strict";
-    var game = new Phaser.Game(300, 300, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update, render: render });
+    var game = new Phaser.Game(885, 681, Phaser.CANVAS, 'Find the Object', { preload: preload, create: create, render: render });
 
     function preload() {
 
-        game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('tiles-1', 'assets/tiles-1.png');
-        game.load.spritesheet('dude', 'assets/dude.png', 48, 32);
-        game.load.image('door', 'assets/door.png');
-        game.load.image('background', 'assets/black background.png');
-        game.load.audio('steps1', 'assets/steps1.mp3');
-        game.load.audio('steps2', 'assets/steps2.mp3');
-
+        game.load.spritesheet('button', 'assets/transparent.png', 193, 71);
+        //game.load.spritesheet('button', 'assets/button_sprite_sheet.png', 193, 71);
+        game.load.image('image1','assets/image1.png');
+        game.load.image('image2','assets/image2.png');
+        game.load.image('image3','assets/image3.png');
+        game.load.audio('music','assets/music.ogg');
+        game.load.audio('wrong','assets/wrong.ogg');
+        game.load.audio('right','assets/right.ogg');
     }
 
-    var map;
-    var tileset;
-    var layer;
-    var door;
-    var player;
-    var facing = 'right';
-    var jumpTimer = 0;
-    var cursors;
-    var jumpButton;
-    var bg;
-    var won = false;
-    var nextStep = 1;
-    var steps1;
-    var steps2;
-    var playing = false;
+    var background;
+    var music;
+    var wrong;
+    var right;
+    var text; 
+    var buttons1;
+    var correctLetter1;
+    var buttons2;
+    var correctLetter2;
+
+    var buttons3;
+    var button31;
+    var button32;
+    var button33;
+    var button34;
+    var button35;
 
     function create() {
 
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        background = game.add.sprite(443, 340, 'image1');
+        background.anchor.setTo(0.5, 0.5)
+        background.name = 'background';
 
-        game.stage.backgroundColor = '#000000';
-
-        bg = game.add.tileSprite(0, 0, 800, 600, 'background');
-        bg.fixedToCamera = true;
-
-        map = game.add.tilemap('level1');
-
-        map.addTilesetImage('tiles-1');
-
-        map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
-
-        layer = map.createLayer('Tile Layer 1');
-
-        //  Un-comment this on to see the collision tiles
-        // layer.debug = true;
-
-        layer.resizeWorld();
-
-        game.physics.arcade.gravity.y = 250;
+        music = game.add.audio('music', 1, true, true);
+        music.loop = true;
+        music.autoplay = true;
+        music.play();
         
-        door = game.add.sprite(789, 369, 'door');
-
-        player = game.add.sprite(32, 32, 'dude');
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-
-        //player.body.bounce.y = 0.2;
-        player.body.collideWorldBounds = true;
-        player.body.setSize(46, 32, 1, 0);
-
-        player.animations.add('left', [0, 1, 2, 3], 10, true);
-        //player.animations.add('turn', [4], 20, true);
-        player.animations.add('right', [4, 5, 6, 7], 10, true);
-
-        game.camera.follow(player);
-
-        cursors = game.input.keyboard.createCursorKeys();
-        jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        wrong = game.add.audio('wrong');
+        right = game.add.audio('right');
         
-        steps1 = game.add.audio('steps1');
-        //steps1
-        steps2 = game.add.audio('steps2');
+        
+        //text = game.add(0, 0, "Nah");
 
+        level1();
+    }
+    
+    function level1 () {
+        background.loadTexture('image1');
+
+        var button11 = game.add.button(373, 350, 'button', buttonPress1, this, 2, 1, 0);
+        button11.name = 'cake';
+        button11.width = 123;
+        button11.height = 106;
+
+        var button12 = game.add.button(275, 427, 'button', buttonPress1, this, 2, 1, 0);
+        button12.name = 'strawberry';
+        button12.width = 82;
+        button12.height = 50;
+
+        var button13 = game.add.button(315, 473, 'button', buttonPress1, this, 2, 1, 0);
+        button13.name = 'banana';
+        button13.width = 71;
+        button13.height = 47;
+
+        var button14 = game.add.button(387, 470, 'button', buttonPress1, this, 2, 1, 0);
+        button14.name = 'apple';
+        button14.width = 78;
+        button14.height = 46;
+
+        var button15 = game.add.button(470, 488, 'button', buttonPress1, this, 2, 1, 0);
+        button15.name = 'cookie';
+        button15.width = 104;
+        button15.height = 46;
+
+        buttons1 = [button11, button12, button13, button14, button15];
+        correctLetter1 = buttons1[Math.floor(Math.random() * buttons1.length)].name.charAt(0);
+        
+        //text.destroy();
+        text = game.add.text(5, 0, "Click on a food on the table that starts with the letter "+correctLetter1+".", {fill: 'white'});
     }
 
-    function update() {
-
-        if(won)
-            game.pause();
-        
-        if(game.physics.arcade.distanceBetween(player, door) <= 20){
-            var winText = game.add.text(0, 0, "You Won!", { font: "64px Comic Sans", fill: "#ffffff", align: "center" });
-            winText.fixedToCamera = true;
-            winText.cameraOffset.setTo(15, 200);
-            won = true;
+    function buttonPress1 (button) {
+        if(correctLetter1 == button.name.charAt(0)){
+            right.play();
+            text.destroy();
+            text = game.add.text(5, 0, "Correct, that is the "+button.name+", which does start with "+correctLetter1+".", {fill: 'white', boundsAlignH: 'center'});
+            for(var i=0; i < buttons1.length; i++)
+                buttons1[i].destroy();
+            text.destroy();
+            setTimeout(level2(), 50000);
         }
-        
-        if(steps1._isPlaying || steps2._isPlaying)
-            playing = true;
-        else
-            playing = false;
-        
-        if(game.physics.arcade.collide(player, layer) && player.body.velocity.x != 0 && !playing)//!steps1._isPlaying && !steps2._isPlaying)
-            playFx();
-        else if(!playing)//!steps1._isPlaying && !steps2._isPlaying)
-            nextStep = 1;
-            
-
-        player.body.velocity.x = 0;
-
-        if (cursors.left.isDown)
-        {
-            player.body.velocity.x = -150;
-
-            if (facing != 'left')
-            {
-                player.animations.play('left');
-                facing = 'left';
-            }
-        }
-        else if (cursors.right.isDown)
-        {
-            player.body.velocity.x = 150;
-
-            if (facing != 'right')
-            {
-                player.animations.play('right');
-                facing = 'right';
-            }
-        }
-        else
-        {
-            if (facing != 'idle')
-            {
-                player.animations.stop();
-
-                if (facing == 'left')
-                {
-                    player.frame = 0;
-                }
-                else
-                {
-                    player.frame = 4;
-                }
-
-                facing = 'idle';
-            }
-        }
-
-        if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer)
-        {
-            player.body.velocity.y = -250;
-            jumpTimer = game.time.now + 750;
+        else{
+            wrong.play();
+            text.destroy();
+            text = game.add.text(5, 0, "No, that is the "+button.name+", and "+button.name+" does not start with "+correctLetter1+".", {fill: 'white', boundsAlignH: 'center'});
         }
 
     }
     
-    function playFx(){
-        if(!steps1._isPlaying && !steps2._isPlaying)
-        switch (nextStep){
-            case 1:
-                steps1.play("", 0, 1, false, false);
-                nextStep = 2;
-                break;
-                
-            case 2:
-                steps2.play("", 0, 1, false, false);
-                nextStep = 1;
-                break;
+    function level2 () {
+        background.loadTexture('image2');
+
+        var button21 = game.add.button(125, 157, 'button', buttonPress2, this, 2, 1, 0);
+        button21.name = 'calendar';
+        button21.width = 165;
+        button21.height = 140;
+
+        var button22 = game.add.button(110, 220, 'button', buttonPress2, this, 2, 1, 0);
+        button22.name = 'trophy';
+        button22.width = 54;
+        button22.height = 112;
+
+        var button23 = game.add.button(133, 375, 'button', buttonPress2, this, 2, 1, 0);
+        button23.name = 'clock';
+        button23.width = 98;
+        button23.height = 138;
+
+        var button24 = game.add.button(123, 503, 'button', buttonPress2, this, 2, 1, 0);
+        button24.name = 'notepad';
+        button24.width = 80;
+        button24.height = 34;
+
+        var button25 = game.add.button(237, 460, 'button', buttonPress2, this, 2, 1, 0);
+        button25.name = 'cup';
+        button25.width = 51;
+        button25.height = 59;
+
+        var button26 = game.add.button(312, 85, 'button', buttonPress2, this, 2, 1, 0);
+        button26.name = 'picture';
+        button26.width = 181;
+        button26.height = 134;
+
+        var button27 = game.add.button(660, 150, 'button', buttonPress2, this, 2, 1, 0);
+        button27.name = 'window';
+        button27.width = 181;
+        button27.height = 207;
+
+        var button28 = game.add.button(614, 310, 'button', buttonPress2, this, 2, 1, 0);
+        button28.name = 'book';
+        button28.width = 127;
+        button28.height = 58;
+
+        var button29 = game.add.button(753, 328, 'button', buttonPress2, this, 2, 1, 0);
+        button29.name = 'baseball';
+        button29.width = 48;
+        button29.height = 48;
+
+        var button210 = game.add.button(801, 420, 'button', buttonPress2, this, 2, 1, 0);
+        button210.name = 'bat';
+        button210.width = 59;
+        button210.height = 176;
+
+        buttons2 = [button21, button22, button23, button24, button25, button26, button27, button28, button29, button210];
+        correctLetter2 = buttons2[Math.floor(Math.random() * buttons2.length)].name.charAt(0);
+        
+        text = game.add.text(5, 0, "Click on an object that starts with the letter "+correctLetter2+".", {fill: 'white'});
+    }
+    
+    function buttonPress2 (button) {
+        if(correctLetter2 == button.name.charAt(0)){
+            right.play();
+            text.destroy();
+            text = game.add.text(5, 0, "Correct, that is the "+button.name+", which does start with "+correctLetter1+".", {fill: 'white', boundsAlignH: 'center'});
+            for(var i=0; i < buttons2.length; i++)
+                buttons2[i].destroy();
+            text.destroy();
+            setTimeout(level1(), 3000);
+        }
+        else{
+            wrong.play();
+            text.destroy();
+            text = game.add.text(5, 0, "No, that is the "+button.name+", and "+button.name+" does not start with "+correctLetter2+".", {fill: 'white', boundsAlignH: 'center'});
         }
     }
-
+    
     function render () {
-
-        // game.debug.text(game.time.physicsElapsed, 32, 32);
-        // game.debug.body(player);
-        // game.debug.bodyInfo(player, 16, 24);
 
     }
 };
